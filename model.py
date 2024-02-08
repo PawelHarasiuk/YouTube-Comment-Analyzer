@@ -10,3 +10,7 @@ class Model:
 
     def predict(self, X):
         return self.classifier.predict(X)
+
+    def predict_sentiment(self, text):
+        predicted_sentiment = self.classifier.predict(text)
+        return predicted_sentiment[0]

@@ -7,6 +7,8 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 class DataPreprocessing:
     def __init__(self):
         self.df = self.read_data()
+        self.tfidf_vectorizer = TfidfVectorizer(max_features=5000)
+        self.tfidf_vectorizer.fit(self.df['text'])
 
     def read_data(self):
         columns = ["sentiment", "timestamp", "date", "query", "user", "text"]
@@ -31,3 +33,9 @@ class DataPreprocessing:
         X_val_tfidf = tfidf_vectorizer.transform(X_val)
 
         return X_train_tfidf, X_val_tfidf, y_train, y_val
+
+    def vectorize_text(self, text):
+        preprocessed_text = self.preprocess_text(text)
+        vectorized_text = self.tfidf_vectorizer.transform([preprocessed_text])
+        return vectorized_text
+
