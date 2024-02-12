@@ -1,5 +1,5 @@
 import googleapiclient.discovery
-
+import re
 
 class YTScraper:
     def __init__(self):
@@ -24,3 +24,11 @@ class YTScraper:
             request = self.youtube.commentThreads().list_next(request, response)
 
         return comments
+
+    def extract_video_id(self, url):
+        pattern = r'(?<=v=)([a-zA-Z0-9_-]+)'
+        match = re.search(pattern, url)
+        if match:
+            return match.group(1)
+        else:
+            return None
