@@ -1,6 +1,5 @@
 from data_preprocessing import DataPreprocessing
 from model import Model
-from model_evaluation import ModelEvaluator
 from yt_scraper import YTScraper
 
 data_preprocessing = DataPreprocessing()
@@ -8,12 +7,7 @@ data_preprocessing = DataPreprocessing()
 
 def prepeare_model():
     X_train_tfidf, X_val_tfidf, y_train, y_val = data_preprocessing.split_data()
-
     model = Model(X_train_tfidf, y_train)
-
-    model_evaluator = ModelEvaluator(X_val_tfidf, y_val)
-    model_metrics = model_evaluator.evaluate_model(model)
-    print(model_metrics)
     return model
 
 
@@ -57,13 +51,3 @@ if __name__ == '__main__':
         url = input("Enter a YouTube video URL: ")
         rate_yt_comments(url, model)
 
-    # while True:
-    #     comment = input("Enter a comment: ")
-    #     vectorized_comment = data_preprocessing.vectorize_text(comment)
-    #     predicted_sentiment = model.predict_sentiment(vectorized_comment)
-    #     if predicted_sentiment == 4:
-    #         print(f"Predicted sentiment: {'positive'}")
-    #     elif predicted_sentiment == 0:
-    #         print(f"Predicted sentiment: {'negative'}")
-    #     else:
-    #         print(f"Predicted sentiment: {'neutral'}")
