@@ -1,53 +1,60 @@
+import pickle
+from fastapi import FastAPI
+from pydantic import BaseModel
 from data_preprocessing import DataPreprocessing
-from model import Model
 from yt_scraper import YTScraper
+
+app = FastAPI()
+
+# Load the pre-trained model using pickle
+with open("model.pkl", "rb") as f:
+    model = pickle.load(f)
 
 data_preprocessing = DataPreprocessing()
 
+class VideoURL(BaseModel):
+    url: str
 
-def prepeare_model():
-    X_train_tfidf, X_val_tfidf, y_train, y_val = data_preprocessing.split_data()
-    model = Model(X_train_tfidf, y_train)
-    return model
-
-
-def rate_yt_comments(url, model):
+@app.post("/rate_comments/")
+def rate_comments(video_url: VideoURL):
     try:
         yt_scraper = YTScraper()
-        video_id = yt_scraper.extract_video_id(url)
+        video_id = yt_scraper.extract_video_id(video_url.url)
         comments = yt_scraper.get_comments(video_id)
 
         count_positive = 0
         count_negative = 0
         count_neutral = 0
 
+        sentiment_results = []
+
         for comment in comments:
             vectorized_comment = data_preprocessing.vectorize_text(comment)
             predicted_sentiment = model.predict_sentiment(vectorized_comment)
             if predicted_sentiment == '1':
-                print(f"Comment: {comment} | Predicted sentiment: {'positive'}")
+                sentiment = 'positive'
                 count_positive += 1
             elif predicted_sentiment == '-1':
-                print(f"Comment: {comment} | Predicted sentiment: {'negative'}")
+                sentiment = 'negative'
                 count_negative += 1
             elif predicted_sentiment == '0':
-                print(f"Comment: {comment} | Predicted sentiment: {'neutral'}")
+                sentiment = 'neutral'
                 count_neutral += 1
+            sentiment_results.append({"comment": comment, "sentiment": sentiment})
 
-        print(f"Positive comments: {count_positive}")
-        print(f"Negative comments: {count_negative}")
-        print(f"Neutral comments: {count_neutral}")
-        print(f"Positive rate: {count_positive / len(comments) * 100}%")
-        print(f"Negative rate: {count_negative / len(comments) * 100}%")
-        print(f"Neutral rate: {count_neutral / len(comments) * 100}%")
+        total_comments = len(comments)
+        positive_rate = count_positive / total_comments * 100 if total_comments != 0 else 0
+        negative_rate = count_negative / total_comments * 100 if total_comments != 0 else 0
+        neutral_rate = count_neutral / total_comments * 100 if total_comments != 0 else 0
+
+        return {
+            "positive_comments": count_positive,
+            "negative_comments": count_negative,
+            "neutral_comments": count_neutral,
+            "positive_rate": positive_rate,
+            "negative_rate": negative_rate,
+            "neutral_rate": neutral_rate,
+            "sentiment_results": sentiment_results
+        }
     except Exception as e:
-        print(f"Error: {e}")
-
-
-if __name__ == '__main__':
-    model = prepeare_model()
-
-    while True:
-        url = input("Enter a YouTube video URL: ")
-        rate_yt_comments(url, model)
-
+        return {"error": str(e)}
