@@ -1,25 +1,22 @@
 import pickle
 from fastapi import FastAPI
-from pydantic import BaseModel
 from data_preprocessing import DataPreprocessing
 from yt_scraper import YTScraper
 
 app = FastAPI()
 
-# Load the pre-trained model using pickle
-with open("model.pkl", "rb") as f:
+model_file = "model.pkl"
+
+with open(model_file, "rb") as f:
     model = pickle.load(f)
 
 data_preprocessing = DataPreprocessing()
 
-class VideoURL(BaseModel):
-    url: str
-
-@app.post("/rate_comments/")
-def rate_comments(video_url: VideoURL):
+@app.get("/rate_comments/")
+def rate_comments(url: str):
     try:
         yt_scraper = YTScraper()
-        video_id = yt_scraper.extract_video_id(video_url.url)
+        video_id = yt_scraper.extract_video_id(url)
         comments = yt_scraper.get_comments(video_id)
 
         count_positive = 0

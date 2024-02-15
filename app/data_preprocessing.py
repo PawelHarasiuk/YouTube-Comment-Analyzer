@@ -12,7 +12,7 @@ class DataPreprocessing:
 
     def read_data(self):
         columns = ["text", "category"]
-        df = pd.read_csv("data/Twitter_Data.csv", header=None, names=columns,
+        df = pd.read_csv("../data/Twitter_Data.csv", header=None, names=columns,
                          encoding='ISO-8859-1')
         df = df.dropna(subset=['text', 'category'])
         return df
