@@ -1,9 +1,12 @@
 import googleapiclient.discovery
+from dotenv import load_dotenv
 import re
+import os
 
 class YTScraper:
     def __init__(self):
-        self.API_KEY = 'AIzaSyDzm6Wz7T-KaV2tS2p79-jRMRTh2P2nJy4'
+        load_dotenv()
+        self.API_KEY = os.getenv("API_KEY")
         self.youtube = googleapiclient.discovery.build('youtube', 'v3', developerKey=self.API_KEY)
 
     def get_comments(self, video_id):

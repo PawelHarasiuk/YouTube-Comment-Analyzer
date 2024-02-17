@@ -2,18 +2,21 @@ import pickle
 from fastapi import FastAPI
 from data_preprocessing import DataPreprocessing
 from yt_scraper import YTScraper
+import sys
 
-app = FastAPI()
+# app = FastAPI()
 
-model_file = "model.pkl"
+model_file = "./app/model.pkl"
 
 with open(model_file, "rb") as f:
     model = pickle.load(f)
 
 data_preprocessing = DataPreprocessing()
+url = "https://www.youtube.com/watch?v=CzAyaSolZjY"
 
-@app.get("/rate_comments/")
-def rate_comments(url: str):
+
+# @app.get("/rate_comments/")
+def rate_comments():
     try:
         yt_scraper = YTScraper()
         video_id = yt_scraper.extract_video_id(url)
@@ -55,3 +58,6 @@ def rate_comments(url: str):
         }
     except Exception as e:
         return {"error": str(e)}
+
+
+print(rate_comments())
