@@ -1,25 +1,19 @@
 import pickle
-from fastapi import FastAPI
 from data_preprocessing import DataPreprocessing
 from yt_scraper import YTScraper
-import sys
 
-# app = FastAPI()
-
-model_file = "./app/model.pkl"
+model_file = "./model.pkl"
 
 with open(model_file, "rb") as f:
     model = pickle.load(f)
 
 data_preprocessing = DataPreprocessing()
-url = "https://www.youtube.com/watch?v=CzAyaSolZjY"
 
 
-# @app.get("/rate_comments/")
-def rate_comments():
+def handler(event, context):
     try:
         yt_scraper = YTScraper()
-        video_id = yt_scraper.extract_video_id(url)
+        video_id = yt_scraper.extract_video_id(event['url'])
         comments = yt_scraper.get_comments(video_id)
 
         count_positive = 0
@@ -58,6 +52,3 @@ def rate_comments():
         }
     except Exception as e:
         return {"error": str(e)}
-
-
-print(rate_comments())
