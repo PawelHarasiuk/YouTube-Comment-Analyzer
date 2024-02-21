@@ -24,7 +24,7 @@ To run this app you need to install jq.
   ```
   brew install jq
   ```
-  if you do not have brew firstly you should install it 
+  if you do not have brew on macos firstly you should install it 
 
 ### Installation
 This command will download script to run program:
