@@ -10,7 +10,7 @@ As you can see in screenshot you send url of youtube video in body and we get ba
 
 ## Running the Application with bash script 🧪
 ### How script works
-This Bash script sends a POST request to an AWS API endpoint with a provided URL as JSON data, then uses jq to format the response and save it to a file named "raport.json".
+This Bash script sends a POST request to an AWS API endpoint with a provided URL as JSON data, then uses jq to format the response, then script creates file "raport.json" in current directory and save raport in it.
 ### Prerequisites
 To run this app you need to install jq.
 - Linux
