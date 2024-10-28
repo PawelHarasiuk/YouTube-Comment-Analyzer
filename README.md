@@ -2,7 +2,7 @@
 
 ## How this app works 📊
 ### Description
-I developed an application that utilizes the YouTube Data API to retrieve comments from YouTube, performs sentiment analysis (positive, neutral, negative), and determines the percentage share of each category in the comments. I used Python with libraries such as pandas and scikit-learn for data analysis, as well as JSON format for sending information back to the user. The project is deployed on AWS Lambda, triggered by AWS API Gateway. I managed version control using Git and GitHub, with application packaging in a Docker container.
+I developed an application that uses the YouTube Data API to retrieve comments from YouTube, performs sentiment analysis (positive, neutral, negative), and determines the percentage share of each category in the comments. I used Python with libraries such as pandas and scikit-learn for data analysis, as well as JSON format for sending information back to the user. The project is deployed on AWS Lambda, triggered by AWS API Gateway. I managed version control using Git and GitHub, with application packaging in a Docker container.
 ### Presentation of API using Postman
 As you can see in screenshot you send url of youtube video in body and we get back json with analized comments
 
